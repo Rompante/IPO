@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 
-const API_BASE = 'https://effective-capybara-v665669654wghp5gj-3000.app.github.dev';
+const API_BASE = 'https://turbo-zebra-wrr4rrpr4wjrhg749-3000.app.github.dev';
 
 function App() {
   return (
@@ -169,8 +169,14 @@ function ClientesList() {
       )}
     </>
   );
-
 }
+
+
+
+
+
+
+
 
 function VeiculosList() {
   const [deleteId, setDeleteId] = useState(null);
@@ -180,14 +186,15 @@ function VeiculosList() {
   const [mensagemErro, setMensagemErro] = useState(null);
   const navigate = useNavigate();
   useEffect(() => {
+
     fetchData();
   }, []);
-
 
   const openDeleteModal = (id) => {
     setDeleteId(id);
     setShowDeleteModal(true);
   };
+
   const closeDeleteModal = () => {
     setDeleteId(null);
     setShowDeleteModal(false);
@@ -203,30 +210,27 @@ function VeiculosList() {
         setMensagemErro(data.message);
       }
     } catch {
-      setMensagemErro('Erro ao eliminar Veiculos');
-    }
-    finally {
+      setMensagemErro('Erro ao eliminar veiculo');
+    } finally {
       closeDeleteModal();
     }
   };
 
-
   const fetchData = async () => {
     try {
-      const response = await fetch(API_BASE + '/veiculos/');
+      const response = await fetch(API_BASE + '/veiculos');
       const data = await response.json();
       if (data.success) {
         setVeiculos(data.data);
       } else {
         setMensagemErro(data.message);
       }
-    } catch(e) {
-      setMensagemErro('Erro ao carregar Veiculosx' + e);
+    } catch {
+      setMensagemErro('Erro ao carregar Veiculos');
     } finally {
       setLoading(false);
     }
   };
-
   if (loading) return <p>Carregando...</p>;
   return (
     <>
@@ -250,10 +254,11 @@ function VeiculosList() {
       <table className="table table-striped">
         <thead>
           <tr>
+            <th>Código</th>
             <th>Matrícula</th>
             <th>Data Livrete</th>
-            <th>Ano Fabrico</th>
-            <th>Nome do Cliente</th>
+            <th>Ano farbrico</th>
+            <th>Nome do cliente</th>
             <th>Marca</th>
             <th>Opções</th>
           </tr>
@@ -264,7 +269,9 @@ function VeiculosList() {
               <td>{veiculos.codveiculo}</td>
               <td>{veiculos.codmatricula}</td>
               <td>{veiculos.datalivrete}</td>
-              <td>{veiculos.anoFabrico}</td>
+              <td>{veiculos.anofabrico}</td>
+              <td>{veiculos.cliente.nome}</td>
+              <td>{veiculos.marca.marca}</td>
               <td style={{ whiteSpace: 'nowrap' }}>
                 <button className="btn btn-dark btn-sm mr-2" ><i className='fa fa-eye' aria-hidden='true'></i></button>
                 <button className="btn btn-dark btn-sm mr-2" ><i className='fa fa-pencil' aria-hidden='true'></i></button>
@@ -300,9 +307,12 @@ function VeiculosList() {
           </div>
         </>
       )}
+
     </>
   );
 }
+
+
 function InspecoesList() {
   return (<h2>Página de Inspeções</h2>);
 }
